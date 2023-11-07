@@ -1,104 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR Experience with Three.js</title>
-  <style>
-    body { margin: 0; }
-  </style>
+ <title>AR Experience with AR.js</title>
+ <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.5/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.module.js';
-
-    let scene, camera, renderer;
-    let rot = 0;
-    let rotSpeed = 0.01;
-    let xrButton;
-
-    async function init() {
-      // Create a Three.js scene
-      scene = new THREE.Scene();
-
-      // Create a camera
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 30;
-
-      // Create a WebGL renderer
-      renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      // Create and add 3D boxes to the scene
-      const boxGeometry = new THREE.BoxGeometry(20, 20, 20);
-
-      const material1 = new THREE.MeshBasicMaterial({ color: 0x64F064 });
-      const cube1 = new THREE.Mesh(boxGeometry, material1);
-      scene.add(cube1);
-
-      const material2 = new THREE.MeshBasicMaterial({ color: 0xF06464 });
-      const cube2 = new THREE.Mesh(boxGeometry, material2);
-      cube2.position.x = -40;
-      scene.add(cube2);
-
-      const material3 = new THREE.MeshBasicMaterial({ color: 0x6464F0 });
-      const cube3 = new THREE.Mesh(boxGeometry, material3);
-      cube3.position.x = 40;
-      scene.add(cube3);
-
-      // Enable WebXR
-      if ('xr' in navigator) {
-        xrButton = document.createElement('button');
-        xrButton.textContent = 'Enter AR';
-        xrButton.addEventListener('click', enterXR);
-        document.body.appendChild(xrButton);
-      } else {
-        console.log('WebXR not supported in this browser.');
-      }
-
-      animate();
-    }
-
-    async function enterXR() {
-      try {
-        const xrSession = await navigator.xr.requestSession('immersive-ar', {
-          requiredFeatures: ['local', 'hit-test'],
-        });
-
-        xrButton.style.display = 'none';
-
-        const xrReferenceSpace = await xrSession.requestReferenceSpace('local');
-
-        const xrLayer = new XRWebGLLayer(xrSession, renderer);
-        xrSession.updateRenderState({ baseLayer: xrLayer });
-
-        xrSession.requestAnimationFrame(onXRFrame);
-
-        function onXRFrame(time, frame) {
-          const pose = frame.getViewerPose(xrReferenceSpace);
-          if (pose) {
-            const view = pose.views[0];
-            const viewport = xrLayer.getViewport(view);
-            renderer.setSize(viewport.width, viewport.height);
-            camera.projectionMatrix.fromArray(view.projectionMatrix);
-            const viewMatrix = new THREE.Matrix4().fromArray(view.transform.matrix);
-            camera.matrix.getInverse(viewMatrix);
-            camera.updateMatrixWorld();
-          }
-
-          // Rotate the cubes
-          rot += rotSpeed;
-          scene.rotation.y = rot;
-
-          renderer.render(scene, camera);
-          xrSession.requestAnimationFrame(onXRFrame);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // Initialize the 3D scene
-    init();
-  </script>
+ <a-scene embedded arjs>
+   <a-marker preset="hiro">
+     <a-entity geometry="primitive: box; width: 2; height: 2; depth: 2" material="color: green"></a-entity>
+   </a-marker>
+ </a-scene>
 </body>
 </html>
