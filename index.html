@@ -20,6 +20,8 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            overflow-x: hidden; /* Hide horizontal scrollbars */
+            overflow-y: hidden; /* Hide vertical scrollbars */
         }
         /* Style for the close button */
         #close-button {
@@ -44,7 +46,13 @@
     <script>
         // Function to close the full-screen view
         function closeFullscreen() {
-            document.body.requestFullscreen().exit();
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
         }
     </script>
 </body>
