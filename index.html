@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Isometric Tile</title>
+  <title>Isometric Tile Rotation</title>
   <style>
     body {
       display: flex;
@@ -9,15 +9,27 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      transform-origin: 50% 50%; 
     }
 
     .tile {
       width: 100px;
       height: 50px;
       background-color: #ccc;
-      transform: rotate(-45deg) skewX(26.565deg); 
+      transform: rotate(-45deg) skewX(26.565deg);
       transform-origin: 50% 50%;
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); 
     }
 
     .tile::before {
@@ -34,6 +46,37 @@
   </style>
 </head>
 <body>
-  <div class="tile"></div>
+  <div class="container">
+    <div class="tile"></div>
+  </div>
+
+  <script>
+    const container = document.querySelector('.container');
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+    });
+
+    container.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const currentX = e.clientX;
+      const currentY = e.clientY;
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+      const rotation = deltaX / 10; // Adjust sensitivity as needed
+      container.style.transform = `rotate(${rotation}deg)`;
+      startX = currentX;
+      startY = currentY;
+    });
+  </script>
 </body>
 </html>
