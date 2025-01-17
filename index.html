@@ -1,15 +1,60 @@
+from IPython.display import display, HTML
+
+# HTML and JavaScript code for full-screen view with a close button
+html_code = """
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <style>
+        /* Style for the full-screen container */
+        #fullscreen-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        /* Style for the close button */
+        #close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body style='margin : 0px; overflow: hidden;'>
-    <a-scene embedded arjs>
-        <a-marker preset="hiro">
-            <a-entity gltf-model="scene.gltf" scale="0.05 0.05 0.05"></a-entity>
-        </a-marker>
-        <a-entity camera></a-entity>
-    </a-scene>
+<body>
+    <!-- Full-screen container -->
+    <div id="fullscreen-container">
+        <!-- Content to display in full-screen -->
+        <h1>Full-Screen View</h1>
+        <p>This is a full-screen view within the Jupyter notebook.</p>
+        <!-- Close button -->
+        <button id="close-button" onclick="closeFullscreen()">Close</button>
+    </div>
+
+    <script>
+        // Function to close the full-screen view
+        function closeFullscreen() {
+            var container = document.getElementById('fullscreen-container');
+            container.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
+"""
+
+# Display the HTML code in the notebook
+display(HTML(html_code))
