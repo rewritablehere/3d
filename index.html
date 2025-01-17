@@ -1,20 +1,18 @@
-from IPython.display import display, HTML
-
-# HTML and JavaScript code for full-screen view with a close button
-html_code = """
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Full-Screen View</title>
     <style>
         /* Style for the full-screen container */
-        #fullscreen-container {
+        body {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: white;
-            z-index: 9999;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -36,25 +34,15 @@ html_code = """
     </style>
 </head>
 <body>
-    <!-- Full-screen container -->
-    <div id="fullscreen-container">
-        <!-- Content to display in full-screen -->
-        <h1>Full-Screen View</h1>
-        <p>This is a full-screen view within the Jupyter notebook.</p>
-        <!-- Close button -->
-        <button id="close-button" onclick="closeFullscreen()">Close</button>
-    </div>
+    <h1>Full-Screen View</h1>
+    <p>This is a full-screen view of your website.</p>
+    <button id="close-button" onclick="closeFullscreen()">Close</button>
 
     <script>
         // Function to close the full-screen view
         function closeFullscreen() {
-            var container = document.getElementById('fullscreen-container');
-            container.style.display = 'none';
+            document.body.requestFullscreen().exit();
         }
     </script>
 </body>
 </html>
-"""
-
-# Display the HTML code in the notebook
-display(HTML(html_code))
