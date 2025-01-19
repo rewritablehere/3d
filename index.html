@@ -1,41 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Isometric Tile Rotation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Canvas with Filters</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="tile"></div>
-  </div>
+    <div id="filterPane">
+        <div class="filter-section">
+            <h3>Date Range</h3>
+            <label for="fromDate">From:</label>
+            <input type="date" id="fromDate" value="2020-01-30">
+            <br>
+            <label for="toDate">To:</label>
+            <input type="date" id="toDate" value="2020-03-18">
+        </div>
+        <div class="filter-section">
+            <h3>Filters</h3>
+            <div class="toggle-filter">
+                <input type="checkbox" id="confirmedCases">
+                <label for="confirmedCases">Confirmed Cases</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="hospitalisedCases">
+                <label for="hospitalisedCases">Hospitalised Cases</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="deaths">
+                <label for="deaths">Deaths</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="casesInICU">
+                <label for="casesInICU">Cases in ICU</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="recoveredCases">
+                <label for="recoveredCases">Recovered Cases</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="canadian">
+                <label for="canadian">Canadian</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="foreignNational">
+                <label for="foreignNational">Foreign National</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="source1">
+                <label for="source1">Source 1</label>
+            </div>
+            <div class="toggle-filter">
+                <input type="checkbox" id="source2">
+                <label for="source2">Source 2</label>
+            </div>
+        </div>
+    </div>
+    <div id="canvas">
+        <div id="graph"></div>
+    </div>
+    <script>
+        // Example 3D plot using Plotly.js
+        function plotGraph() {
+            var data = [{
+                type: 'scatter3d',
+                mode: 'lines',
+                x: ['2020-01-30', '2020-02-10', '2020-02-20', '2020-03-01', '2020-03-18'],
+                y: [10, 20, 5, 15, 25], // Example data
+                z: [1, 2, 3, 4, 5], // Example data
+                line: {
+                    width: 6,
+                    color: '#1f77b4'
+                }
+            }];
 
-  <script>
-    const container = document.querySelector('.container');
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
+            var layout = {
+                margin: {
+                    l: 0,
+                    r: 0,
+                    b: 0,
+                    t: 0
+                },
+                scene: {
+                    xaxis: {
+                        title: 'Date'
+                    },
+                    yaxis: {
+                        title: 'Cases'
+                    },
+                    zaxis: {
+                        title: 'Filter Value'
+                    }
+                }
+            };
 
-    container.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-    });
+            Plotly.newPlot('graph', data, layout);
+        }
 
-    container.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
+        // Initial plot
+        plotGraph();
 
-    container.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const currentX = e.clientX;
-      const currentY = e.clientY;
-      const deltaX = currentX - startX;
-      const deltaY = currentY - startY;
-      const rotation = deltaX / 10; // Adjust sensitivity as needed
-      container.style.transform = `rotate(${rotation}deg)`;
-      startX = currentX;
-      startY = currentY;
-    });
-  </script>
+        // Add event listeners for filters
+        document.querySelectorAll('.toggle-filter input').forEach(input => {
+            input.addEventListener('change', () => {
+                // Update the graph based on selected filters
+                plotGraph();
+            });
+        });
+
+        document.getElementById('fromDate').addEventListener('change', plotGraph);
+        document.getElementById('toDate').addEventListener('change', plotGraph);
+    </script>
 </body>
 </html>
