@@ -78,15 +78,15 @@
         <h1>3D Graph</h1>
     </div>
     <div id="filterPane">
+<button id="closeFilterPane">✖</button>
         <div class="filter-section">
-            <h3>Date Range</h3>
-            <label for="fromDate">From:</label>
-            <input type="date" id="fromDate" value="2020-01-30">
-            <br>
-            <label for="toDate">To:</label>
-            <input type="date" id="toDate" value="2020-03-18">
-        </div>
-        <div class="filter-section">
+                    <h3>Date Range</h3>
+        <label for="fromDate">From:</label>
+        <input type="date" id="fromDate" value="2020-01-30">
+        <br>
+        <label for="toDate">To:</label>
+        <input type="date" id="toDate" value="2020-03-18">
+    </div>
             <h3>Filters</h3>
             <div class="toggle-filter">
                 <input type="checkbox" id="confirmedCases">
@@ -130,64 +130,69 @@
         <div id="graph"></div>
     </div>
     <script>
-        // Toggle filter pane visibility
-        const hamburger = document.getElementById('hamburger');
-        const filterPane = document.getElementById('filterPane');
+    // Toggle filter pane visibility
+    const hamburger = document.getElementById('hamburger');
+    const filterPane = document.getElementById('filterPane');
+    const closeFilterPane = document.getElementById('closeFilterPane');
 
-        hamburger.addEventListener('click', () => {
-            filterPane.classList.toggle('show');
-        });
+    hamburger.addEventListener('click', () => {
+        filterPane.classList.toggle('show');
+    });
 
-        // Example 3D plot using Plotly.js
-        function plotGraph() {
-            var data = [{
-                type: 'scatter3d',
-                mode: 'lines',
-                x: ['2020-01-30', '2020-02-10', '2020-02-20', '2020-03-01', '2020-03-18'],
-                y: [10, 20, 5, 15, 25], // Example data
-                z: [1, 2, 3, 4, 5], // Example data
-                line: {
-                    width: 6,
-                    color: '#1f77b4'
-                }
-            }];
+    closeFilterPane.addEventListener('click', () => {
+        filterPane.classList.remove('show');
+    });
 
-            var layout = {
-                margin: {
-                    l: 0,
-                    r: 0,
-                    b: 0,
-                    t: 0
+    // Example 3D plot using Plotly.js
+    function plotGraph() {
+        var data = [{
+            type: 'scatter3d',
+            mode: 'lines',
+            x: ['2020-01-30', '2020-02-10', '2020-02-20', '2020-03-01', '2020-03-18'],
+            y: [10, 20, 5, 15, 25], // Example data
+            z: [1, 2, 3, 4, 5], // Example data
+            line: {
+                width: 6,
+                color: '#1f77b4'
+            }
+        }];
+
+        var layout = {
+            margin: {
+                l: 0,
+                r: 0,
+                b: 0,
+                t: 0
+            },
+            scene: {
+                xaxis: {
+                    title: 'Date'
                 },
-                scene: {
-                    xaxis: {
-                        title: 'Date'
-                    },
-                    yaxis: {
-                        title: 'Cases'
-                    },
-                    zaxis: {
-                        title: 'Filter Value'
-                    }
+                yaxis: {
+                    title: 'Cases'
+                },
+                zaxis: {
+                    title: 'Filter Value'
                 }
-            };
+            }
+        };
 
-            Plotly.newPlot('graph', data, layout);
-        }
+        Plotly.newPlot('graph', data, layout);
+    }
 
-        // Initial plot
-        plotGraph();
+    // Initial plot
+    plotGraph();
 
-        // Add event listeners for filters
-        document.querySelectorAll('.toggle-filter input').forEach(input => {
-            input.addEventListener('change', () => {
-                // Update the graph based on selected filters
-                plotGraph();
-            });
+    // Add event listeners for filters
+    document.querySelectorAll('.toggle-filter input').forEach(input => {
+        input.addEventListener('change', () => {
+            // Update the graph based on selected filters
+            plotGraph();
         });
+    });
 
-        document.getElementById('fromDate').addEventListener('change', plotGraph);
-        document.getElementById('toDate').addEventListener('change', plotGraph);
+    document.getElementById('fromDate').addEventListener('change', plotGraph);
+    document.getElementById('toDate').addEventListener('change', plotGraph);
     </script>
 </body>
 </html>
